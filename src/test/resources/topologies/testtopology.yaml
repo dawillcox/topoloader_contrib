@@ -1,0 +1,54 @@
+workers: 4
+g.env: TEST
+
+schemas:
+  - fields: &AdwLookupInput
+      - xxx
+
+  - fields: &SinkFields
+      - yyy
+
+  - fields: &PassThrough
+      - zzz
+      - aaaaa
+
+
+spouts:
+  Spout:
+    class: org.apache.storm.topology.builder.MockLoadableObject
+    spreadworkers: true
+    parallelism: 5
+    schema:
+      - user_local_day_of_week
+    
+bolts:
+  Bolt1:
+    class: org.apache.storm.topology.builder.MockLoadableObject
+    parallelism: 10
+    lineid:
+        class: org.apache.storm.topology.builder.MockLoadableObject
+    account:
+        class: org.apache.storm.topology.builder.MockLoadableObject
+    inputs:
+      - Spout:impressions
+      - Spout:clicks
+      - Spout:beacons
+      - Spout:engagement
+
+  Bolt2:
+    class: org.apache.storm.topology.builder.MockLoadableObject
+    throttle: 0.5
+    inputs:
+      - Bolt1:outstream
+      - class: org.apache.storm.topology.builder.MockLoadableObject
+        component: Bolt1
+
+  Sink:
+    class: org.apache.storm.topology.builder.MockLoadableObject
+    outPath: /tmp/Sink.txt
+    flush: true
+    inputs:
+      - Bolt1:outstream
+    schema:
+      - *PassThrough
+      - *SinkFields

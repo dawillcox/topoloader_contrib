@@ -1,0 +1,6 @@
+listpatch:
+    spouts>Spout>schema:
+        add:
+          - event_uuid
+        remove:
+          - user_local_day_of_week
