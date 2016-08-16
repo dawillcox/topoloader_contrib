@@ -92,6 +92,7 @@ Options are:
      --dryrun               : Dryrun. Build topology but don't submit
      --help (-h)            : print help message
      --inactive (-i)        : Inactive. Submit topology but don't activate
+                            : (Inactive isn't currently supported by Heron.)
      --local (-l) seconds   : run in local mode for this many seconds
      --maxparallel (-p) N   : topology max parallelism
      --name (-n) Name       : the name of the topology
@@ -259,13 +260,13 @@ Supported option parameters are:
     --dryrun               : Dryrun. Build topology but don't submit
     --help (-h)            : print help message
     --inactive (-i)        : Inactive. Submit topology but don't activate
+                           : (Inactive isn't currently supported by Heron.)
     --local (-l) seconds   : run in local mode for this many seconds
     --maxparallel (-p) N   : topology max parallelism
     --name (-n) Name       : the name of the topology
     --overrides overrides  : comma-separated list of YAML files to update main YAML
     --workers (-w) N       : number of workers
     --debug                : print more verbose output
-    --inactive             : Submit the topology but don’t activate it
 
 
 ## Advanced Features

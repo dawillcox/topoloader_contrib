@@ -20,20 +20,15 @@
 package org.apache.storm.topology;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import backtype.storm.Config;
+import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+import backtype.storm.generated.StormTopology;
+import org.apache.storm.topology.builder.ILoader;
+import org.apache.storm.topology.builder.ITopologyConfigurator;
+import org.apache.storm.topology.builder.Loader;
+import org.apache.storm.topology.builder.Loader.LoadFailure;
+import org.apache.utils.DefaultingMap;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -41,18 +36,11 @@ import org.kohsuke.args4j.Option;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
-import org.apache.storm.topology.builder.ILoader;
-import org.apache.storm.topology.builder.ITopologyConfigurator;
-import org.apache.storm.topology.builder.Loader;
-import org.apache.storm.topology.builder.Loader.LoadFailure;
-import org.apache.utils.DefaultingMap;
-
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
-import backtype.storm.generated.StormTopology;
-import backtype.storm.generated.SubmitOptions;
-import backtype.storm.generated.TopologyInitialStatus;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+//import backtype.storm.generated.SubmitOptions;
+//import backtype.storm.generated.TopologyInitialStatus;
 
 
 /**
@@ -86,8 +74,8 @@ public class TopoLoader implements ITopologyConfigurator {
     @Option(name="--dryrun",  usage="Dryrun. Build topology but don't submit")
     private boolean _dryrun = false;
     
-    @Option(name="--inactive", aliases={"-i"}, usage="Inactive. Submit topology but don't activate")
-    private boolean _inactive = false;
+//    @Option(name="--inactive", aliases={"-i"}, usage="Inactive. Submit topology but don't activate")
+//    private boolean _inactive = false;
 
     @Argument
     private List<String> _args = new ArrayList<String>();
@@ -173,7 +161,7 @@ public class TopoLoader implements ITopologyConfigurator {
         
         ILoader tLoader = getLoader(conf);
         StormTopology topology = tLoader.getTopology();
-        SubmitOptions submitOptions = new SubmitOptions(_inactive ? TopologyInitialStatus.INACTIVE : TopologyInitialStatus.ACTIVE);
+//        SubmitOptions submitOptions = new SubmitOptions(_inactive ? TopologyInitialStatus.INACTIVE : TopologyInitialStatus.ACTIVE);
         if (_workers < 0) {
             _workers = conf.getInt("workers", 1);
         }
@@ -225,7 +213,8 @@ public class TopoLoader implements ITopologyConfigurator {
                     // TODO: Was this a local enhancement?s
                     // stormConf.put(Config.TOPOLOGY_USERS, topoUsers);
                 }
-                StormSubmitter.submitTopology(_topologyName, stormConf, topology, submitOptions);
+//                StormSubmitter.submitTopology(_topologyName, stormConf, topology, submitOptions);
+                StormSubmitter.submitTopology(_topologyName, stormConf, topology);
             } catch (Exception e) {
                 System.out.println("Error submitting topology: " + e.getMessage());
                 e.printStackTrace();
